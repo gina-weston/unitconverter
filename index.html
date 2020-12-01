@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Unit Converter">
+    <meta name="keywords" content="JavaScript, HTML, CSS">
+    <meta name="author" content="Gina Weston">
+    <title>JavaScript Calculator</title>
+    <link rel="stylesheet" type="text/css" href="assets/style/calculator.css">
+</head>
+<body>
+<form id="myform">
+    <div class="formcontainer">
+        <h1>Unit Converter (AJAX)</h1>
+        <fieldset id="detail">
+            <legend>Unit Converter (AJAX)</legend>  
+            <br>
+            
+            <label class="formlabel" for="FromValue">From Value: </label>
+            <input type="text" id="FromValue" name="FromValue" size="15" maxlength="15"
+                    data-rule-required="true"  data-msg-required="Value is Required" 
+                    data-rule-number="true" data-msg-number="Value must be a Number">
+            <label for="FromValue" class="error" id="FromValueMsg"></label>
+            <br><br>
+
+            <label class="formlabel">From Unit: </label>
+                <label for="FromUnit">
+                    <input type="radio" name="FromUnit" id="Centimeters" value = "cm"
+                           data-rule-required="true" data-msg-required="From Unit is Required" />centimeters
+                </label>
+                <label for="FromUnit">
+                    <input type="radio" name="FromUnit" id="Meters" value = "m">meters
+                </label>
+                <label for="FromUnit">
+                    <input type="radio" name="FromUnit" id="Kilometers" value = "km">kilometers
+                </label>
+                <label for="FromUnit">
+                    <input type="radio" name="FromUnit" id="Inches" value = "in">inches
+                </label>
+                 <label for="FromUnit">
+                    <input type="radio" name="FromUnit" id="Feet" value = "ft">feet
+                </label>
+                <label for="FromUnit">
+                    <input type="radio" name="FromUnit" id="Yards" value = "yd">yards
+                </label>
+                <label for="FromUnit">
+                    <input type="radio" name="FromUnit" id="Miles" value = "mi">miles
+                </label>
+            <label for="FromUnit" class="error" id="FromUnitMsg"></label>
+            <br><br>
+
+            <label class="formlabel">To Unit: </label>
+                <label for="ToUnit">
+                    <input type="radio" name="ToUnit" id="Centimeters2" value = "cm"
+                           data-rule-required="true" data-msg-required="To Unit is Required" />centimeters
+                </label>
+                <label for="ToUnit">
+                    <input type="radio" name="ToUnit" id="Meters2" value = "m">meters
+                </label>
+                <label for="ToUnit">
+                    <input type="radio" name="ToUnit" id="Kilometers2" value = "km">kilometers
+                </label>
+                <label for="ToUnit">
+                    <input type="radio" name="ToUnit" id="Inches2" value = "in">inches
+                </label>
+                 <label for="ToUnit">
+                    <input type="radio" name="ToUnit" id="Feet2" value = "ft">feet
+                </label>
+                <label for="ToUnit">
+                    <input type="radio" name="ToUnit" id="Yards2" value = "yd">yards
+                </label>
+                <label for="ToUnit">
+                    <input type="radio" name="ToUnit" id="Miles2" value = "mi">miles
+                </label>
+            <label for="ToUnit" class="error" id="ToUnitMsg"></label>
+            <br><br>
+      
+      
+
+            <label class="formlabel">To Value: </label>
+            <span id="ToValue"></span>
+            <br><br>
+
+            <input type="button" value="Calculate" name="Calculate" onclick="calculate();">
+            <input type="button" value="Clear" name="Clear" onclick="clearform();">
+
+        </fieldset>
+    </div>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script>
+function calculate() {
+    "use strict";
+
+    // Get a reference to the form - Use the ID of the form
+    var form = $( "#myform" );
+    
+    // If all of the form elements are valid, the get the form values
+    if (form.valid()) {
+        
+    
+        var fromvalue = document.getElementById("FromValue").value;
+
+       
+        var fromunits;
+        if (document.getElementById("Centimeters").checked) {
+            fromunits = document.getElementById("Centimeters").value;
+        }
+        if (document.getElementById("Meters").checked) {
+            fromunits = document.getElementById("Meters").value;
+        }
+        if (document.getElementById("Kilometers").checked) {
+            fromunits = document.getElementById("Kilometers").value;
+        }
+        if (document.getElementById("Inches").checked) {
+            fromunits = document.getElementById("Inches").value;
+        }
+        if (document.getElementById("Feet").checked) {
+            fromunits = document.getElementById("Feet").value;
+        }
+        if (document.getElementById("Yards").checked) {
+            fromunits = document.getElementById("Yards").value;
+        }
+        if (document.getElementById("Miles").checked) {
+            fromunits = document.getElementById("Miles").value;
+        }
+        
+    
+        var tounits;
+           if (document.getElementById("Centimeters2").checked) {
+            tounits = document.getElementById("Centimeters2").value;
+        }
+        if (document.getElementById("Meters2").checked) {
+            tounits = document.getElementById("Meters2").value;
+        }
+        if (document.getElementById("Kilometers2").checked) {
+            tounits = document.getElementById("Kilometers2").value;
+        }
+        if (document.getElementById("Inches2").checked) {
+            tounits = document.getElementById("Inches2").value;
+        }
+        if (document.getElementById("Feet2").checked) {
+            tounits = document.getElementById("Feet2").value;
+        }
+        if (document.getElementById("Yards2").checked) {
+            tounits = document.getElementById("Yards2").value;
+        }
+        if (document.getElementById("Miles2").checked) {
+            tounits = document.getElementById("Miles2").value;
+        }
+        
+        // URL and method used with AJAX Call
+        var myURL = "https://brucebauer.info/assets/ITEC3650/unitsconversion.php";
+        var myMethod = "POST";
+
+       
+        
+        /* Create the data object and add the values as properties to the object 
+        The names of the properties must EXACTLY match the names required by the AJAX page  */
+        var myData = {};
+        myData.FromValue = fromvalue;
+        myData.FromUnit = fromunits;
+        myData.ToUnit = tounits;
+        
+        /* Make sure document is ready */
+        $(document).ready(function() {
+
+            /* Perform AJAX call to process data */
+            $.ajax({
+              method: myMethod,
+              data: myData,
+              url: myURL
+            })
+
+            /* AJAX complete - display the result */
+            .done(function( msg ) {
+                document.getElementById("ToValue").innerHTML = msg;
+            });
+        });
+    }
+}
+
+
+function clearform() {
+    "use strict";
+    
+    /* Set all of the form values to blank or false */
+    document.getElementById("FromValue").value = "";
+    document.getElementById("FromValueMsg").innerHTML = "";
+    document.getElementById("Centimeters").checked = false;
+    document.getElementById("Meters").checked = false;
+    document.getElementById("Kilometers").checked = false;
+    document.getElementById("Inches").checked = false;
+    document.getElementById("Feet").checked = false;
+    document.getElementById("Yards").checked = false;
+    document.getElementById("Miles").checked = false;
+    document.getElementById("Centimeters2").checked = false;
+    document.getElementById("Meters2").checked = false;
+    document.getElementById("Kilometers2").checked = false;
+    document.getElementById("Inches2").checked = false;
+    document.getElementById("Feet2").checked = false;
+    document.getElementById("Yards2").checked = false;
+    document.getElementById("Miles2").checked = false;
+    document.getElementById("ToValue").innerHTML = "";
+}
+
+$( "#myform" ).validate({
+
+}); 
+
+
+</script>
+</body>
+</html>
